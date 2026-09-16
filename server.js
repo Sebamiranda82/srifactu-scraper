@@ -93,6 +93,16 @@ app.post('/facturas-sri', async (req, res) => {
         waitUntil: 'domcontentloaded', timeout: 60000
       });
 
+      console.log('DEBUG misComprobantes - URL:', page.url());
+      console.log('DEBUG misComprobantes - Titulo:', await page.title());
+      const htmlDebug = await page.content();
+      console.log('DEBUG misComprobantes - HTML length:', htmlDebug.length);
+      console.log('DEBUG misComprobantes - HTML primeros 1000:', htmlDebug.substring(0, 1000));
+      const existeTipoComp = await page.$('#tipoComprobante');
+      console.log('DEBUG existe #tipoComprobante:', !!existeTipoComp);
+      const existeFecha = await page.$('#fechaEmision');
+      console.log('DEBUG existe #fechaEmision:', !!existeFecha);
+
       // Seleccionar tipo comprobante: Factura
       await page.waitForSelector('#tipoComprobante', { timeout: 10000 }).catch(()=>{});
       await page.select('#tipoComprobante', '01').catch(()=>{});
