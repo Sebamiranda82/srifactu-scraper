@@ -41,7 +41,7 @@ app.post('/facturas-sri', async (req, res) => {
 
     // 1. Login SRI
     console.log('Entrando al portal SRI...');
-    await page.goto('https://srienlinea.sri.gob.ec/auth/realms/Internet/protocol/openid-connect/auth?client_id=app-internet&redirect_uri=https%3A%2F%2Fsrienlinea.sri.gob.ec%2Fsri-en-linea%2F%23%2FmisComprobantes&response_type=code&scope=openid', {
+    await page.goto('https://srienlinea.sri.gob.ec/tuportal-internet/', {
       waitUntil: 'domcontentloaded', timeout: 60000
     });
 
