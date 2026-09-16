@@ -39,11 +39,31 @@ app.post('/facturas-sri', async (req, res) => {
     const page = await browser.newPage();
     await page.setViewport({ width: 1280, height: 800 });
 
-    // 1. Login SRI
+    // 1. Login SRI (con reintentos por posibles bloqueos/cortes de red)
     console.log('Entrando al portal SRI...');
-    await page.goto('https://srienlinea.sri.gob.ec/tuportal-internet/', {
-      waitUntil: 'domcontentloaded', timeout: 60000
-    });
+    let intentosLogin = 0;
+    let loginOk = false;
+    let ultimoErrorLogin = null;
+    while (intentosLogin < 3 && !loginOk) {
+      intentosLogin++;
+      try {
+        console.log(`Intento de login #${intentosLogin}...`);
+        await page.goto('https://srienlinea.sri.gob.ec/tuportal-internet/', {
+          waitUntil: 'domcontentloaded', timeout: 60000
+        });
+        loginOk = true;
+      } catch(errLogin) {
+        ultimoErrorLogin = errLogin;
+        console.log(`Intento #${intentosLogin} fallo: ${errLogin.message}`);
+        if (intentosLogin < 3) {
+          console.log('Esperando 5 segundos antes de reintentar...');
+          await new Promise(r => setTimeout(r, 5000));
+        }
+      }
+    }
+    if (!loginOk) {
+      throw new Error(`No se pudo cargar el portal SRI tras 3 intentos. Ultimo error: ${ultimoErrorLogin.message}`);
+    }
 
     console.log('URL actual:', page.url());
     console.log('Titulo:', await page.title());
