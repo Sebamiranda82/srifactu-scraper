@@ -74,6 +74,11 @@ app.post('/facturas-sri', async (req, res) => {
     await page.click('#kc-login');
     await page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 60000 });
     console.log('Login OK');
+    console.log('POST-LOGIN URL:', page.url());
+    console.log('POST-LOGIN Titulo:', await page.title());
+    const htmlPostLogin = await page.content();
+    console.log('POST-LOGIN contiene form login?:', htmlPostLogin.includes('kc-form-login'));
+    console.log('POST-LOGIN contiene mensaje error?:', htmlPostLogin.toLowerCase().includes('invalid') || htmlPostLogin.toLowerCase().includes('incorrecta') || htmlPostLogin.toLowerCase().includes('invalida'));
 
     // 2. Iterar por fechas
     const facturas = [];
