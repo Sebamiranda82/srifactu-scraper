@@ -40,13 +40,13 @@ app.post('/facturas-sri', async (req, res) => {
     // 1. Login SRI
     console.log('Entrando al portal SRI...');
     await page.goto('https://srienlinea.sri.gob.ec/auth/realms/Internet/protocol/openid-connect/auth?client_id=app-internet&redirect_uri=https%3A%2F%2Fsrienlinea.sri.gob.ec%2Fsri-en-linea%2F%23%2FmisComprobantes&response_type=code&scope=openid', {
-      waitUntil: 'networkidle2', timeout: 30000
+      waitUntil: 'domcontentloaded', timeout: 60000
     });
 
     await page.type('#username', ruc);
     await page.type('#password', clave);
     await page.click('#kc-login');
-    await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 30000 });
+    await page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 60000 });
     console.log('Login OK');
 
     // 2. Iterar por fechas
@@ -65,7 +65,7 @@ app.post('/facturas-sri', async (req, res) => {
       console.log(`Consultando ${fechaDia}...`);
 
       await page.goto(`https://srienlinea.sri.gob.ec/sri-en-linea/#/misComprobantes`, {
-        waitUntil: 'networkidle2', timeout: 20000
+        waitUntil: 'domcontentloaded', timeout: 60000
       });
 
       // Seleccionar tipo comprobante: Factura
