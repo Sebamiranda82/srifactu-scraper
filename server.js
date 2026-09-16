@@ -90,7 +90,7 @@ app.post('/facturas-sri', async (req, res) => {
 
       console.log(`Consultando ${fechaDia}...`);
 
-      await page.goto(`https://srienlinea.sri.gob.ec/sri-en-linea/#/misComprobantes`, {
+      await page.goto(`https://srienlinea.sri.gob.ec/tuportal-internet/accederAplicacion.jspa?redireccion=60&idGrupo=58`, {
         waitUntil: 'domcontentloaded', timeout: 60000
       });
 
