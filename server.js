@@ -70,6 +70,16 @@ app.post('/facturas-sri', async (req, res) => {
     console.log('HTML primeros 500 chars:', (await page.content()).substring(0, 500));
     await page.waitForSelector('#usuario', { timeout: 15000 });
     await page.type('#usuario', ruc);
+    // Respaldo: sincronizar manualmente el campo oculto #username por si el JS de la pagina no lo hace solo
+    await page.evaluate((rucVal) => {
+      const campoOculto = document.getElementById('username');
+      if (campoOculto) campoOculto.value = rucVal;
+    }, ruc);
+    // Disparar blur en #usuario por si el sitio sincroniza en ese evento
+    await page.evaluate(() => {
+      const campo = document.getElementById('usuario');
+      if (campo) campo.blur();
+    });
     await page.type('#password', clave);
     await page.click('#kc-login');
     await page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 60000 });
