@@ -106,7 +106,7 @@ app.post('/facturas-sri', async (req, res) => {
       console.log('DEBUG existe #fechaEmision:', !!existeFecha);
 
       // Seleccionar tipo comprobante: Factura
-      await page.waitForSelector('#tipoComprobante', { timeout: 10000 }).catch(()=>{});
+      await page.waitForSelector('#tipoComprobante', { timeout: 30000 });
       await page.select('#tipoComprobante', '01').catch(()=>{});
 
       // Ingresar fecha
