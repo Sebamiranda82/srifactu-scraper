@@ -68,7 +68,8 @@ app.post('/facturas-sri', async (req, res) => {
     console.log('URL actual:', page.url());
     console.log('Titulo:', await page.title());
     console.log('HTML primeros 500 chars:', (await page.content()).substring(0, 500));
-    await page.type('#username', ruc);
+    await page.waitForSelector('#usuario', { timeout: 15000 });
+    await page.type('#usuario', ruc);
     await page.type('#password', clave);
     await page.click('#kc-login');
     await page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 60000 });
