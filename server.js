@@ -76,6 +76,7 @@ app.post('/facturas-sri', async (req, res) => {
 
     // 2. Iterar por fechas
     const facturas = [];
+    let htmlCapturado = null;
     const [dDesde, mDesde, yDesde] = fechaDesde.split('/').map(Number);
     const [dHasta, mHasta, yHasta] = fechaHasta.split('/').map(Number);
     const inicio = new Date(yDesde, mDesde-1, dDesde);
@@ -98,6 +99,7 @@ app.post('/facturas-sri', async (req, res) => {
       const htmlDebug = await page.content();
       console.log('DEBUG misComprobantes - HTML length:', htmlDebug.length);
       console.log('DEBUG misComprobantes - HTML primeros 1000:', htmlDebug.substring(0, 1000));
+      if (!htmlCapturado) htmlCapturado = htmlDebug;
       const existeTipoComp = await page.$('#tipoComprobante');
       console.log('DEBUG existe #tipoComprobante:', !!existeTipoComp);
       const existeFecha = await page.$('#fechaEmision');
@@ -139,7 +141,7 @@ app.post('/facturas-sri', async (req, res) => {
 
     await browser.close();
     console.log(`Total facturas: ${facturas.length}`);
-    res.json({ ok: true, facturas });
+    res.json({ ok: true, facturas, htmlDebug: htmlCapturado });
 
   } catch(e) {
     if (browser) await browser.close().catch(()=>{});
